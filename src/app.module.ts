@@ -9,10 +9,11 @@ import { envSchema } from './env'
 import { PrismaService } from './prisma/prisma.service'
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    validate: env => envSchema.parse(env),
-    isGlobal: true,
-  }),
+  imports: [
+    ConfigModule.forRoot({
+      validate: (env) => envSchema.parse(env),
+      isGlobal: true,
+    }),
     AuthModule,
   ],
   controllers: [
@@ -23,4 +24,4 @@ import { PrismaService } from './prisma/prisma.service'
   ],
   providers: [PrismaService],
 })
-export class AppModule { }
+export class AppModule {}
