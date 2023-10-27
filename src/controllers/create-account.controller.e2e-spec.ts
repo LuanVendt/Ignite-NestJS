@@ -1,6 +1,6 @@
-import { AppModule } from "@/app.module"
-import { PrismaService } from "@/prisma/prisma.service"
-import { INestApplication } from "@nestjs/common"
+import { AppModule } from '@/app.module'
+import { PrismaService } from '@/prisma/prisma.service'
+import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
@@ -11,8 +11,7 @@ describe('Create account (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .compile()
+    }).compile()
 
     app = moduleRef.createNestApplication()
 
@@ -33,7 +32,7 @@ describe('Create account (E2E)', () => {
     const userOnDataBase = await prisma.user.findUnique({
       where: {
         email: 'johndoe@example.com',
-      }
+      },
     })
 
     expect(userOnDataBase).toBeTruthy()
