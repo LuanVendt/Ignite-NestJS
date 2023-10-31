@@ -23,7 +23,7 @@ export class AuthenticateController {
   constructor(
     private jwt: JwtService,
     private prisma: PrismaService,
-  ) { }
+  ) {}
 
   @Post()
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))

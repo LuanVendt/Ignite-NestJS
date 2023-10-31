@@ -1,4 +1,5 @@
 import { Either, right } from '@/core/either'
+import { Injectable } from '@nestjs/common'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionsRepository } from '../repositories/questions-repository'
 
@@ -13,8 +14,9 @@ type FetchRecentQuestionsResponse = Either<
   }
 >
 
+@Injectable()
 export class FetchRecentQuestionsUseCase {
-  constructor(private questionRepository: QuestionsRepository) {}
+  constructor(private questionRepository: QuestionsRepository) { }
 
   async execute({
     page,
