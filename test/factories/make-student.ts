@@ -1,5 +1,8 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Student, StudentProps } from '@/domain/forum/enterprise/entities/student'
+import {
+    Student,
+    StudentProps,
+} from '@/domain/forum/enterprise/entities/student'
 import { PrismaStudentMapper } from '@/infra/database/prisma/mappers/prisma-student-mapper'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { faker } from '@faker-js/faker'
@@ -30,7 +33,7 @@ export class StudentFactory {
         const student = makeStudent(data)
 
         await this.prisma.user.create({
-            data: PrismaStudentMapper.toPrisma(student)
+            data: PrismaStudentMapper.toPrisma(student),
         })
 
         return student
