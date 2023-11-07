@@ -62,7 +62,7 @@ describe('Comment on answer (E2E)', () => {
         const commentOnDataBase = await prisma.comment.findFirst({
             where: {
                 content: 'New comment',
-            },
+            }, 
         })
 
         expect(commentOnDataBase).toBeTruthy()
