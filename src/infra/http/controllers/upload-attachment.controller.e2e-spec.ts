@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { StudentFactory } from 'test/factories/make-student'
+import { string } from 'zod'
 
 describe('Upload attachments (E2E)', () => {
     let app: INestApplication
@@ -36,5 +37,8 @@ describe('Upload attachments (E2E)', () => {
             .attach('file', './test/e2e/sample-upload.jpg')
 
         expect(response.statusCode).toBe(201)
+        expect(response.body).toEqual({
+            attachmentId: expect.any(string),
+        })
     })
 })
