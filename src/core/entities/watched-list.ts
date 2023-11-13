@@ -103,6 +103,8 @@ export abstract class WatchedList<T> {
       return !items.some((b) => this.compareItems(a, b))
     })
 
+    console.log('removido: ', removedItems)
+
     this.currentItems = items
     this.new = newItems
     this.removed = removedItems

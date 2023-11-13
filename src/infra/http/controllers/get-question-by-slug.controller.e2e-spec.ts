@@ -1,6 +1,6 @@
 import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 import { AppModule } from '@/infra/app.module'
-import { DataBaseModule } from '@/infra/database/database.module'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -16,7 +16,7 @@ describe('Get question by slug (E2E)', () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [AppModule, DataBaseModule],
+            imports: [AppModule, DatabaseModule],
             providers: [StudentFactory, QuestionFactory],
         }).compile()
 

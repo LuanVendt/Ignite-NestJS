@@ -1,5 +1,5 @@
 import { AppModule } from '@/infra/app.module'
-import { DataBaseModule } from '@/infra/database/database.module'
+import { DatabaseModule } from '@/infra/database/database.module'
 
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
@@ -20,7 +20,7 @@ describe('Fetch answer comments (E2E)', () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [AppModule, DataBaseModule],
+            imports: [AppModule, DatabaseModule],
             providers: [StudentFactory, AnswerFactory, QuestionFactory, AnswerCommentFactory],
         }).compile()
 

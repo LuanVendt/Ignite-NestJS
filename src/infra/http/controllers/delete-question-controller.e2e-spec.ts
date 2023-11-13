@@ -1,5 +1,5 @@
 import { AppModule } from '@/infra/app.module'
-import { DataBaseModule } from '@/infra/database/database.module'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
@@ -17,7 +17,7 @@ describe('Delete question (E2E)', () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [AppModule, DataBaseModule],
+            imports: [AppModule, DatabaseModule],
             providers: [StudentFactory, QuestionFactory],
         }).compile()
 

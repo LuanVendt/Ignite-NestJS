@@ -2,8 +2,7 @@ import { AnswerAttachmentRepository } from '@/domain/forum/application/repositor
 import { AnswerAttachment } from '@/domain/forum/enterprise/entities/answer-attachment'
 
 export class InMemoryAnswerAttachmentsRepository
-  implements AnswerAttachmentRepository
-{
+  implements AnswerAttachmentRepository {
   public items: AnswerAttachment[] = []
 
   async findManyByAnswerId(answerId: string) {
@@ -11,6 +10,18 @@ export class InMemoryAnswerAttachmentsRepository
       (item) => item.answerId.toString() === answerId,
     )
     return answerAttachment
+  }
+
+  async createMany(attachments: AnswerAttachment[]): Promise<void> {
+    this.items.push(...attachments)
+  }
+
+  async deleteMany(attachments: AnswerAttachment[]): Promise<void> {
+    const answerAttachment = this.items.filter((item) => {
+      return !attachments.some((attachment) => attachment.equals(item))
+    })
+
+    this.items = answerAttachment
   }
 
   async deleteManyByAnswerId(answerId: string) {

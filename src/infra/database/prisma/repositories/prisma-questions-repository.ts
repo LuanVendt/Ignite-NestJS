@@ -68,6 +68,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
 
+
+
     await Promise.all([
       await this.prisma.question.update({
         where: {
@@ -80,7 +82,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         question.attachments.getNewItems()
       ),
 
-      this.questionAttachmentsRepository.createMany(
+      this.questionAttachmentsRepository.deleteMany(
         question.attachments.getRemovedItems()
       ),
     ])
