@@ -3,7 +3,7 @@ import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cas
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { BadRequestException, Controller, Get, Param, Query } from '@nestjs/common'
 import { z } from 'zod'
-import { CommentPresenter } from '../presenters/comment-presenter'
+import { CommentWithAuthorPresenter } from '../presenters/comment-with-author-presenter'
 
 const pageQueryParamSchema = z
     .string()
@@ -35,9 +35,9 @@ export class FetchQuestionCommentsController {
         }
 
 
-        const questionComments = result.value.questionComments
+        const comments = result.value.comments
 
-        return { comments: questionComments.map(CommentPresenter.toHTTP) }
+        return { comments: comments.map(CommentWithAuthorPresenter.toHTTP) }
     }
 }
 
