@@ -12,11 +12,9 @@ let sut: FetchQuestionCommentsUseCase
 
 describe('Fetch Question Comments', async () => {
   beforeEach(() => {
-    inMemoryQuestionCommentsRepository =
-      new InMemoryQuestionCommentsRepository(inMemoryStudentsRepository)
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
-    inMemoryStudentsRepository =
-      new InMemoryStudentsRepository()
+    inMemoryQuestionCommentsRepository = new InMemoryQuestionCommentsRepository(inMemoryStudentsRepository)
 
     sut = new FetchQuestionCommentsUseCase(inMemoryQuestionCommentsRepository)
   })
@@ -41,18 +39,11 @@ describe('Fetch Question Comments', async () => {
       authorId: student.id,
     })
 
+    await inMemoryQuestionCommentsRepository.create(comment1)
 
-    await inMemoryQuestionCommentsRepository.create(
-      comment1
-    )
+    await inMemoryQuestionCommentsRepository.create(comment2)
 
-    await inMemoryQuestionCommentsRepository.create(
-      comment2
-    )
-
-    await inMemoryQuestionCommentsRepository.create(
-      comment3
-    )
+    await inMemoryQuestionCommentsRepository.create(comment3)
 
     const result = await sut.execute({
       questionId: 'question-1',
@@ -69,7 +60,10 @@ describe('Fetch Question Comments', async () => {
         author: 'john doe',
         commentId: comment2.id,
       }),
-      3
+      expect.objectContaining({
+        author: 'john doe',
+        commentId: comment3.id,
+      }),
     ]))
   })
 

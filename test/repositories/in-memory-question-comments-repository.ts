@@ -35,12 +35,12 @@ export class InMemoryQuestionCommentsRepository
       .filter((item) => item.questionId.toString() === questionId)
       .slice((page - 1) * 20, page * 20)
       .map(comment => {
-        const author = this.studentsRepository.items.find(student => {
+        const author = this.studentsRepository.items.find((student) => {
           return student.id.equals(comment.authorId)
         })
 
         if (!author) {
-          throw new Error(`Author wuth ID "${comment.authorId.toString()} does not exist."`)
+          throw new Error(`Author with ID "${comment.authorId.toString()} does not exist."`)
         }
 
         return CommentWithAuthor.create({
