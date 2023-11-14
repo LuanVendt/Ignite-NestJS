@@ -14,7 +14,9 @@ describe('Fetch Question Comments', async () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
 
-    inMemoryQuestionCommentsRepository = new InMemoryQuestionCommentsRepository(inMemoryStudentsRepository)
+    inMemoryQuestionCommentsRepository = new InMemoryQuestionCommentsRepository(
+      inMemoryStudentsRepository,
+    )
 
     sut = new FetchQuestionCommentsUseCase(inMemoryQuestionCommentsRepository)
   })
@@ -51,20 +53,22 @@ describe('Fetch Question Comments', async () => {
     })
 
     expect(result.value?.comments).toHaveLength(3)
-    expect(result.value?.comments).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        author: 'john doe',
-        commentId: comment1.id,
-      }),
-      expect.objectContaining({
-        author: 'john doe',
-        commentId: comment2.id,
-      }),
-      expect.objectContaining({
-        author: 'john doe',
-        commentId: comment3.id,
-      }),
-    ]))
+    expect(result.value?.comments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          author: 'john doe',
+          commentId: comment1.id,
+        }),
+        expect.objectContaining({
+          author: 'john doe',
+          commentId: comment2.id,
+        }),
+        expect.objectContaining({
+          author: 'john doe',
+          commentId: comment3.id,
+        }),
+      ]),
+    )
   })
 
   it('should be able to fetch paginated question comment', async () => {
@@ -76,7 +80,7 @@ describe('Fetch Question Comments', async () => {
       await inMemoryQuestionCommentsRepository.create(
         makeQuestionComment({
           questionId: new UniqueEntityID('question-1'),
-          authorId: student.id
+          authorId: student.id,
         }),
       )
     }

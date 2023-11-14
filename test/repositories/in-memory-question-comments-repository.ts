@@ -5,12 +5,11 @@ import { CommentWithAuthor } from '@/domain/forum/enterprise/entities/value-obje
 import { InMemoryStudentsRepository } from './in-memory-students-repository'
 
 export class InMemoryQuestionCommentsRepository
-  implements QuestionCommentsRepository {
+  implements QuestionCommentsRepository
+{
   public items: QuestionComment[] = []
 
-  constructor(
-    private studentsRepository: InMemoryStudentsRepository
-  ) { }
+  constructor(private studentsRepository: InMemoryStudentsRepository) {}
 
   async findById(id: string) {
     const questionComment = this.items.find((item) => item.id.toString() === id)
@@ -30,17 +29,22 @@ export class InMemoryQuestionCommentsRepository
     return questionComments
   }
 
-  async findManyByQuestionIdWithAuthor(questionId: string, { page }: PaginationParams) {
+  async findManyByQuestionIdWithAuthor(
+    questionId: string,
+    { page }: PaginationParams,
+  ) {
     const questionComments = this.items
       .filter((item) => item.questionId.toString() === questionId)
       .slice((page - 1) * 20, page * 20)
-      .map(comment => {
+      .map((comment) => {
         const author = this.studentsRepository.items.find((student) => {
           return student.id.equals(comment.authorId)
         })
 
         if (!author) {
-          throw new Error(`Author with ID "${comment.authorId.toString()} does not exist."`)
+          throw new Error(
+            `Author with ID "${comment.authorId.toString()} does not exist."`,
+          )
         }
 
         return CommentWithAuthor.create({
@@ -50,7 +54,6 @@ export class InMemoryQuestionCommentsRepository
           updatedAt: comment.updatedAt,
           authorId: comment.authorId,
           author: author.name,
-
         })
       })
     return questionComments

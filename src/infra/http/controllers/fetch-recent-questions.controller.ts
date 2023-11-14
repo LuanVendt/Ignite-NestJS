@@ -17,7 +17,7 @@ type PegeQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
 @Controller('/questions')
 export class FetchRecentQuestionsController {
-  constructor(private fetchRecentQuestions: FetchRecentQuestionsUseCase) { }
+  constructor(private fetchRecentQuestions: FetchRecentQuestionsUseCase) {}
 
   @Get()
   async handle(@Query('page', queryValidationPipe) page: PegeQueryParamSchema) {
@@ -29,10 +29,8 @@ export class FetchRecentQuestionsController {
       throw new BadRequestException()
     }
 
-
     const questions = result.value.questions
 
     return { questions: questions.map(QuestionPresenter.toHTTP) }
   }
 }
-

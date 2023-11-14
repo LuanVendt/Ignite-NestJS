@@ -6,27 +6,27 @@ import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaStudentsRepository implements StudentsRepository {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-    async findByEmail(email: string): Promise<Student | null> {
-        const student = await this.prisma.user.findUnique({
-            where: {
-                email,
-            },
-        })
+  async findByEmail(email: string): Promise<Student | null> {
+    const student = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    })
 
-        if (!student) {
-            return null
-        }
-
-        return PrismaStudentMapper.toDomain(student)
+    if (!student) {
+      return null
     }
 
-    async create(student: Student): Promise<void> {
-        const data = PrismaStudentMapper.toPrisma(student)
+    return PrismaStudentMapper.toDomain(student)
+  }
 
-        await this.prisma.user.create({
-            data,
-        })
-    }
+  async create(student: Student): Promise<void> {
+    const data = PrismaStudentMapper.toPrisma(student)
+
+    await this.prisma.user.create({
+      data,
+    })
+  }
 }

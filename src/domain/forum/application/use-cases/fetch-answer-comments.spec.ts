@@ -13,7 +13,9 @@ let sut: FetchAnswerCommentsUseCase
 describe('Fetch Answer Comments', async () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(inMemoryStudentsRepository)
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository,
+    )
 
     sut = new FetchAnswerCommentsUseCase(inMemoryAnswerCommentsRepository)
   })
@@ -38,7 +40,6 @@ describe('Fetch Answer Comments', async () => {
       authorId: student.id,
     })
 
-
     await inMemoryAnswerCommentsRepository.create(comment1)
     await inMemoryAnswerCommentsRepository.create(comment2)
     await inMemoryAnswerCommentsRepository.create(comment3)
@@ -49,20 +50,22 @@ describe('Fetch Answer Comments', async () => {
     })
 
     expect(result.value?.comments).toHaveLength(3)
-    expect(result.value?.comments).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        author: 'john doe',
-        commentId: comment1.id,
-      }),
-      expect.objectContaining({
-        author: 'john doe',
-        commentId: comment2.id,
-      }),
-      expect.objectContaining({
-        author: 'john doe',
-        commentId: comment3.id,
-      }),
-    ]))
+    expect(result.value?.comments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          author: 'john doe',
+          commentId: comment1.id,
+        }),
+        expect.objectContaining({
+          author: 'john doe',
+          commentId: comment2.id,
+        }),
+        expect.objectContaining({
+          author: 'john doe',
+          commentId: comment3.id,
+        }),
+      ]),
+    )
   })
 
   it('should be able to fetch paginated answer comment', async () => {

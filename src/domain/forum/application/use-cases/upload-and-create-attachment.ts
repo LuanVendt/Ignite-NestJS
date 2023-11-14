@@ -6,46 +6,46 @@ import { Uploader } from '../storage/uploader'
 import { InvalidAttachmentTypeError } from './errors/invalid-attachement-type'
 
 interface UploadAndCreateAttachmentUseCaseRequest {
-    fileName: string
-    fileType: string
-    body: Buffer
+  fileName: string
+  fileType: string
+  body: Buffer
 }
 
 type UploadAndCreateAttachmentUseCaseResponse = Either<
-    InvalidAttachmentTypeError,
-    { attachment: Attachment }
+  InvalidAttachmentTypeError,
+  { attachment: Attachment }
 >
 @Injectable()
 export class UploadAndCreateAttachmentUseCase {
-    constructor(
-        private attachmentsRepository: AttachmentsRepository,
-        private uploader: Uploader
-    ) { }
+  constructor(
+    private attachmentsRepository: AttachmentsRepository,
+    private uploader: Uploader,
+  ) {}
 
-    async execute({
-        fileName,
-        fileType,
-        body,
-    }: UploadAndCreateAttachmentUseCaseRequest): Promise<UploadAndCreateAttachmentUseCaseResponse> {
-        if (!/^(image\/(jpeg|png))$|^application\/pdf$/.test(fileType)) {
-            return left(new InvalidAttachmentTypeError(fileType))
-        }
-
-        const { url } = await this.uploader.upload({
-            fileName: fileName,
-            fileType: fileType,
-            body: body,
-        })
-
-        const attachment = Attachment.create({
-            title: fileName,
-            url,
-        })
-
-        await this.attachmentsRepository.create(attachment)
-
-        return right({
-            attachment,
-        })
+  async execute({
+    fileName,
+    fileType,
+    body,
+  }: UploadAndCreateAttachmentUseCaseRequest): Promise<UploadAndCreateAttachmentUseCaseResponse> {
+    if (!/^(image\/(jpeg|png))$|^application\/pdf$/.test(fileType)) {
+      return left(new InvalidAttachmentTypeError(fileType))
     }
+
+    const { url } = await this.uploader.upload({
+      fileName,
+      fileType,
+      body,
+    })
+
+    const attachment = Attachment.create({
+      title: fileName,
+      url,
+    })
+
+    await this.attachmentsRepository.create(attachment)
+
+    return right({
+      attachment,
+    })
+  }
 }

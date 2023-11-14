@@ -13,7 +13,7 @@ describe('Authenticate (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory]
+      providers: [StudentFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()

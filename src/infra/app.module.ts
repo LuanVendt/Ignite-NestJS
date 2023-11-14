@@ -13,7 +13,7 @@ import { HttpModule } from './http/http.module'
     }),
     AuthModule,
     HttpModule,
-    EnvModule
+    EnvModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

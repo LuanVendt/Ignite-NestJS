@@ -2,7 +2,9 @@ import { PaginationParams } from '@/core/repositories/pagination-params'
 import { QuestionAttachmentRepository } from '@/domain/forum/application/repositories/question-attachments-repositoty'
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
 import { Question } from '@/domain/forum/enterprise/entities/question'
+import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
 import { Injectable } from '@nestjs/common'
+import { PrismaQuestionDetailsMapper } from '../mappers/prisma-question-details-mapper'
 import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 import { PrismaService } from '../prisma.service'
 
@@ -10,8 +12,8 @@ import { PrismaService } from '../prisma.service'
 export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(
     private prisma: PrismaService,
-    private questionAttachmentsRepository: QuestionAttachmentRepository
-  ) { }
+    private questionAttachmentsRepository: QuestionAttachmentRepository,
+  ) {}
 
   async findById(id: string): Promise<Question | null> {
     const question = await this.prisma.question.findUnique({
@@ -41,6 +43,24 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     return PrismaQuestionMapper.toDomain(question)
   }
 
+  async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
+    const question = await this.prisma.question.findUnique({
+      where: {
+        slug,
+      },
+      include: {
+        author: true,
+        attachments: true,
+      },
+    })
+
+    if (!question) {
+      return null
+    }
+
+    return PrismaQuestionDetailsMapper.toDomain(question)
+  }
+
   async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
     const questions = await this.prisma.question.findMany({
       orderBy: {
@@ -61,14 +81,12 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     })
 
     await this.questionAttachmentsRepository.createMany(
-      question.attachments.getItems()
+      question.attachments.getItems(),
     )
   }
 
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
-
-
 
     await Promise.all([
       await this.prisma.question.update({
@@ -79,11 +97,11 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       }),
 
       this.questionAttachmentsRepository.createMany(
-        question.attachments.getNewItems()
+        question.attachments.getNewItems(),
       ),
 
       this.questionAttachmentsRepository.deleteMany(
-        question.attachments.getRemovedItems()
+        question.attachments.getRemovedItems(),
       ),
     ])
   }

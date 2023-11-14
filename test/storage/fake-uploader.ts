@@ -1,23 +1,25 @@
-import { UploadParams, Uploader } from "@/domain/forum/application/storage/uploader";
-import { randomUUID } from "crypto";
+import {
+  UploadParams,
+  Uploader,
+} from '@/domain/forum/application/storage/uploader'
+import { randomUUID } from 'crypto'
 
 interface Upload {
-    fileName: string
-    url: string
+  fileName: string
+  url: string
 }
 
 export class FakeUploader implements Uploader {
-    public uploads: Upload[] = []
+  public uploads: Upload[] = []
 
-    async upload({ fileName }: UploadParams): Promise<{ url: string; }> {
-        const url = randomUUID()
+  async upload({ fileName }: UploadParams): Promise<{ url: string }> {
+    const url = randomUUID()
 
-        this.uploads.push({
-            fileName,
-            url,
-        })
+    this.uploads.push({
+      fileName,
+      url,
+    })
 
-        return { url }
-    }
-
+    return { url }
+  }
 }

@@ -9,8 +9,9 @@ import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaQuestionCommentsRepository
-  implements QuestionCommentsRepository {
-  constructor(private prisma: PrismaService) { }
+  implements QuestionCommentsRepository
+{
+  constructor(private prisma: PrismaService) {}
 
   async create(questionComment: QuestionComment): Promise<void> {
     const data = PrismaQuestionCommentMapper.toPrisma(questionComment)
@@ -33,7 +34,6 @@ export class PrismaQuestionCommentsRepository
 
     return PrismaQuestionCommentMapper.toDomain(questionComment)
   }
-
 
   async findManyByQuestionId(
     questionId: string,
@@ -84,4 +84,3 @@ export class PrismaQuestionCommentsRepository
     })
   }
 }
-

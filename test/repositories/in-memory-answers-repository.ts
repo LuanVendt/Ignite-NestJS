@@ -9,7 +9,7 @@ export class InMemoryAnswersRepository implements AnswersRepository {
 
   constructor(
     private answerAttachmentsRepository: AnswerAttachmentRepository,
-  ) { }
+  ) {}
 
   async findById(id: string) {
     const answer = await this.items.find((item) => item.id.toString() === id)

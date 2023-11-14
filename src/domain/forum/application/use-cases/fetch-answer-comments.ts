@@ -17,14 +17,17 @@ type FetchAnswerCommentsResponse = Either<
 
 @Injectable()
 export class FetchAnswerCommentsUseCase {
-  constructor(private answerCommentsRepository: AnswerCommentsRepository) { }
+  constructor(private answerCommentsRepository: AnswerCommentsRepository) {}
 
   async execute({
     answerId,
     page,
   }: FetchAnswerCommentsRequest): Promise<FetchAnswerCommentsResponse> {
     const comments =
-      await this.answerCommentsRepository.findManyByAnswerIdWithAuthor(answerId, { page })
+      await this.answerCommentsRepository.findManyByAnswerIdWithAuthor(
+        answerId,
+        { page },
+      )
 
     return right({
       comments,

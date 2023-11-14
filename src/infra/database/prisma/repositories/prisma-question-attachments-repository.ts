@@ -6,14 +6,17 @@ import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaQuestionAttachmentsRepository
-  implements QuestionAttachmentRepository {
-  constructor(private prisma: PrismaService) { }
+  implements QuestionAttachmentRepository
+{
+  constructor(private prisma: PrismaService) {}
 
-  async findManyByQuestionId(questionId: string): Promise<QuestionAttachment[]> {
+  async findManyByQuestionId(
+    questionId: string,
+  ): Promise<QuestionAttachment[]> {
     const questionAttachments = await this.prisma.attachment.findMany({
       where: {
         questionId,
-      }
+      },
     })
 
     return questionAttachments.map(PrismaQuestionAttachmentMapper.toDomain)
@@ -26,10 +29,6 @@ export class PrismaQuestionAttachmentsRepository
 
     const data = PrismaQuestionAttachmentMapper.toPrismaUpdateMany(attachments)
 
-    const attachmentIds = attachments.map(attachment => {
-      return attachment.id.toString()
-    })
-
     await this.prisma.attachment.updateMany(data)
   }
 
@@ -38,16 +37,16 @@ export class PrismaQuestionAttachmentsRepository
       return
     }
 
-    const attachmentIds = attachments.map(attachment => {
+    const attachmentIds = attachments.map((attachment) => {
       return attachment.id.toString()
     })
 
     await this.prisma.attachment.deleteMany({
       where: {
         id: {
-          in: attachmentIds
-        }
-      }
+          in: attachmentIds,
+        },
+      },
     })
   }
 
@@ -55,7 +54,7 @@ export class PrismaQuestionAttachmentsRepository
     await this.prisma.attachment.deleteMany({
       where: {
         questionId,
-      }
+      },
     })
   }
 }

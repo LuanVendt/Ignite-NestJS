@@ -22,10 +22,9 @@ export function makeAnswerAttachment(
   return answerAttachment
 }
 
-
 @Injectable()
 export class AnswerAttachmentFactory {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async makePrismaAnswerAttachment(
     data: Partial<AnswerAttachmentProps> = {},

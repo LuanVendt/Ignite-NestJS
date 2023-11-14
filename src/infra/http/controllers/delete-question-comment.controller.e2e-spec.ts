@@ -10,59 +10,60 @@ import { QuestionCommentFactory } from 'test/factories/make-question-comment'
 import { StudentFactory } from 'test/factories/make-student'
 
 describe('Delete question comment (E2E)', () => {
-    let app: INestApplication
-    let prisma: PrismaService
-    let questionFactory: QuestionFactory
-    let questionCommentFactory: QuestionCommentFactory
-    let studentFactory: StudentFactory
-    let jwt: JwtService
+  let app: INestApplication
+  let prisma: PrismaService
+  let questionFactory: QuestionFactory
+  let questionCommentFactory: QuestionCommentFactory
+  let studentFactory: StudentFactory
+  let jwt: JwtService
 
-    beforeAll(async () => {
-        const moduleRef = await Test.createTestingModule({
-            imports: [AppModule, DatabaseModule],
-            providers: [StudentFactory, QuestionFactory, QuestionCommentFactory],
-        }).compile()
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule, DatabaseModule],
+      providers: [StudentFactory, QuestionFactory, QuestionCommentFactory],
+    }).compile()
 
-        app = moduleRef.createNestApplication()
+    app = moduleRef.createNestApplication()
 
-        prisma = moduleRef.get(PrismaService)
-        studentFactory = moduleRef.get(StudentFactory)
-        questionFactory = moduleRef.get(QuestionFactory)
-        questionCommentFactory = moduleRef.get(QuestionCommentFactory)
-        jwt = moduleRef.get(JwtService)
+    prisma = moduleRef.get(PrismaService)
+    studentFactory = moduleRef.get(StudentFactory)
+    questionFactory = moduleRef.get(QuestionFactory)
+    questionCommentFactory = moduleRef.get(QuestionCommentFactory)
+    jwt = moduleRef.get(JwtService)
 
-        await app.init()
+    await app.init()
+  })
+
+  test('[DELETE] /questions/comments/:id', async () => {
+    const user = await studentFactory.makePrismaStudent()
+
+    const accesToken = jwt.sign({ sub: user.id.toString() })
+
+    const question = await questionFactory.makePrismaQuestion({
+      authorId: user.id,
     })
 
-    test('[DELETE] /questions/comments/:id', async () => {
-        const user = await studentFactory.makePrismaStudent()
+    const questionComment =
+      await questionCommentFactory.makePrismaQuestionComment({
+        authorId: user.id,
+        questionId: question.id,
+      })
 
-        const accesToken = jwt.sign({ sub: user.id.toString() })
+    const questionCommentId = questionComment.id.toString()
 
-        const question = await questionFactory.makePrismaQuestion({
-            authorId: user.id,
-        })
+    const response = await request(app.getHttpServer())
+      .delete(`/questions/comments/${questionCommentId}`)
+      .set('Authorization', `Bearer ${accesToken}`)
+      .send()
 
-        const questionComment = await questionCommentFactory.makePrismaQuestionComment({
-            authorId: user.id,
-            questionId: question.id
-        })
+    expect(response.statusCode).toBe(204)
 
-        const questionCommentId = questionComment.id.toString()
-
-        const response = await request(app.getHttpServer())
-            .delete(`/questions/comments/${questionCommentId}`)
-            .set('Authorization', `Bearer ${accesToken}`)
-            .send()
-
-        expect(response.statusCode).toBe(204)
-
-        const commentOnDataBase = await prisma.comment.findUnique({
-            where: {
-                id: questionCommentId,
-            },
-        })
-
-        expect(commentOnDataBase).toBeNull()
+    const commentOnDataBase = await prisma.comment.findUnique({
+      where: {
+        id: questionCommentId,
+      },
     })
+
+    expect(commentOnDataBase).toBeNull()
+  })
 })

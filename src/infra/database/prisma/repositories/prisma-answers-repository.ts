@@ -10,8 +10,8 @@ import { PrismaService } from '../prisma.service'
 export class PrismaAnswersRepository implements AnswersRepository {
   constructor(
     private prisma: PrismaService,
-    private answerAttachmentsRepository: AnswerAttachmentRepository
-  ) { }
+    private answerAttachmentsRepository: AnswerAttachmentRepository,
+  ) {}
 
   async findById(id: string): Promise<Answer | null> {
     const answer = await this.prisma.answer.findUnique({
@@ -53,27 +53,28 @@ export class PrismaAnswersRepository implements AnswersRepository {
     })
 
     await this.answerAttachmentsRepository.createMany(
-      answer.attachments.getItems()
+      answer.attachments.getItems(),
     )
   }
 
   async save(answer: Answer): Promise<void> {
     const data = PrismaAnswerMapper.toPrisma(answer)
 
-    await Promise.all([await this.prisma.answer.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    }),
+    await Promise.all([
+      await this.prisma.answer.update({
+        where: {
+          id: data.id,
+        },
+        data,
+      }),
 
-    this.answerAttachmentsRepository.createMany(
-      answer.attachments.getNewItems()
-    ),
+      this.answerAttachmentsRepository.createMany(
+        answer.attachments.getNewItems(),
+      ),
 
-    this.answerAttachmentsRepository.deleteMany(
-      answer.attachments.getRemovedItems()
-    ),
+      this.answerAttachmentsRepository.deleteMany(
+        answer.attachments.getRemovedItems(),
+      ),
     ])
   }
 

@@ -29,7 +29,7 @@ export class EditQuestionUseCase {
   constructor(
     private questionsRepository: QuestionsRepository,
     private questionAttachmentsRepository: QuestionAttachmentRepository,
-  ) { }
+  ) {}
 
   async execute({
     authorId,
@@ -48,13 +48,12 @@ export class EditQuestionUseCase {
       return left(new NotAllowedError())
     }
 
-
     const currentQuestionAttachments =
-      await this.questionAttachmentsRepository.findManyByQuestionId(questionId);
+      await this.questionAttachmentsRepository.findManyByQuestionId(questionId)
 
     const questionAttachmentList = new QuestionAttachmentList(
       currentQuestionAttachments,
-    );
+    )
 
     // await this.questionAttachmentsRepository.deleteManyByQuestionId(questionId)
 
@@ -62,10 +61,10 @@ export class EditQuestionUseCase {
       return QuestionAttachment.create({
         attachmentId: new UniqueEntityID(attachmentId),
         questionId: question.id,
-      });
-    });
+      })
+    })
 
-    questionAttachmentList.update(questionAttachments);
+    questionAttachmentList.update(questionAttachments)
 
     // console.log('lista: ', questionAttachmentList.currentItems)
 
