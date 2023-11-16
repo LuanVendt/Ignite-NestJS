@@ -33,6 +33,7 @@ import { DeleteAnswerController } from './controllers/delete-answer.controller'
 import { DeleteQuestionCommentController } from './controllers/delete-question-comment.controller'
 import { DeleteQuestionController } from './controllers/delete-question.controller'
 
+import { ReadNotificationUseCase } from '@/domain/notification/application/use-cases/read-notification'
 import { EditAnswerController } from './controllers/edit-answer.controller'
 import { EditQuestionController } from './controllers/edit-question-controller'
 import { FetchAnswerCommentsController } from './controllers/fetch-answer-comments.controller'
@@ -40,6 +41,7 @@ import { FetchQuestionAnswersController } from './controllers/fetch-question-ans
 import { FetchQuestionCommentsController } from './controllers/fetch-question-comments.controller'
 import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller'
 import { GetQuestionBySlugController } from './controllers/get-question-by-slug.controller'
+import { ReadNotificationController } from './controllers/read-notification.controller'
 import { UploadAttachmentController } from './controllers/upload-attachment.controller'
 
 @Module({
@@ -64,6 +66,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     FetchQuestionCommentsController,
     FetchAnswerCommentsController,
     UploadAttachmentController,
+    ReadNotificationController
   ],
   providers: [
     CreateQuestionUseCase,
@@ -85,6 +88,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     FetchQuestionCommentsUseCase,
     FetchAnswerCommentsUseCase,
     UploadAndCreateAttachmentUseCase,
+    ReadNotificationUseCase,
   ],
 })
-export class HttpModule {}
+export class HttpModule { }
